@@ -1,0 +1,86 @@
+question:
+You have a positive integer m and a non-negative integer s. Your task is to find the smallest and the largest of the numbers that have length m and sum of digits s. The required numbers should be non-negative integers written in the decimal base without leading zeroes.
+Code:
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define Mod 1000000007
+#define Max 1000001
+
+//for finding the minimum, in each place I need to select the minimum number of value possible from 0-9. For first digit it will 
+//be from 1-9. So if the (n-1)*9 can handle the given s, then we can have any integer at the nth position. Ofcourse, that should be minimum.
+//Otherwise, if the sum is larger than the capable then we need to find the minimum number which will make the sum to come inside the (n-1)*9.
+//That number should takes place in the nth digit place
+
+string findMin(ll n, ll s){
+    string mini;
+    bool ok=true;
+    for(int i=n-1; i>=0; i--){
+        if(i*9<=s){
+            ll num=(s-i*9);
+            mini.push_back('0'+(s-i*9));
+            s-=num;
+        }
+        else if(ok)
+            mini.push_back('0'+1), s-=1, ok=false;
+        else 
+            mini.push_back('0'), s-=0;
+    }
+    return mini;
+//    return 0;
+}
+
+//For finding the maximum, at each place I need to select the maximum number possible such that the sum of digits does not exceed the 
+//given sum. The maximum possible is 9. So where ever it is possible we need to insert the 9 in that digit place. 
+
+string findMax(int n, int s){
+    if(n*9<s)
+        return "-1";
+    string maxi="";
+    for(int i=0; i<n; i++){
+        maxi.push_back('0'+ min(9, s));
+        s-=min(9,s);
+    }
+    return maxi;
+}
+
+
+
+
+
+void func(){
+    int n,s;
+    cin>>n>>s;
+    if(n*9<s || ((s==0) &&(n>1)))
+        cout<<"-1 -1"<<endl;
+    else if(s==0 && n==1){
+        cout<<"0 0"<<endl;
+    }
+    else
+    cout<<findMin(n,s)<<" "<<findMax(n,s)<<endl;
+}
+int main(){
+
+ios_base::sync_with_stdio(false);
+cin.tie(NULL);
+cout.tie(NULL);
+
+
+//int t;
+//cin >> t;
+//for(ll i=1; i<=t; i++)
+//{
+    
+    func();
+//    cout<<endl;
+//cout<<func()<<endl;
+
+//if(func())
+//    cout<<"Yes"<< endl;
+//else
+//    cout <<"No"<<endl; 
+//cout<<"Case:"<<i<<" "<<     <<endl;
+//}
+return 0;
+}
